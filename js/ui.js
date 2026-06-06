@@ -51,13 +51,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 function actualizarCategorias() {
     const tipo = document.getElementById('tipoMovimiento').value;
     const catSelect = document.getElementById('categoria');
+    if (!catSelect) return;
     
-    // Limpiamos y dejamos la opción por defecto
     catSelect.innerHTML = '<option value="">Categoría</option>';
     
-    // Usamos datosGlobales que obtuvimos al cargar la página
-    // Asegúrate de que los nombres de las propiedades coincidan exactamente con tu JSON
-    const categorias = (tipo === 'gasto') ? datosGlobales.catGastos : datosGlobales.catGanancias;
+    // Si 'tipo' es 'ganancia', buscamos 'catGanancias'
+    // Si 'tipo' es 'gasto', buscamos 'catGastos'
+    const key = (tipo === 'gasto') ? 'catGastos' : 'catGanancias';
+    const categorias = datosGlobales[key];
     
     if (categorias && Array.isArray(categorias)) {
         categorias.forEach(cat => {
@@ -67,7 +68,7 @@ function actualizarCategorias() {
             catSelect.appendChild(option);
         });
     } else {
-        console.error("No se encontraron categorías para el tipo:", tipo);
+        console.warn("Categorías no disponibles para:", tipo);
     }
 }
 
