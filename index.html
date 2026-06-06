@@ -12,6 +12,20 @@
     <div class="max-w-6xl mx-auto">
         <h1 class="text-3xl font-bold mb-6 text-gray-800">Mis Finanzas 2026</h1>
         
+        <div class="bg-blue-50 p-6 rounded-lg mb-8 shadow-sm border border-blue-100">
+            <h2 class="text-lg font-bold mb-4 text-blue-800">Registrar Nuevo Movimiento</h2>
+            <form id="form-gastos" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <input type="date" id="fecha" class="p-2 border rounded" required>
+                <input type="text" id="descripcion" placeholder="Descripción" class="p-2 border rounded" required>
+                <input type="number" id="valor" placeholder="Valor" class="p-2 border rounded" required>
+                <select id="estado" class="p-2 border rounded">
+                    <option value="Pagado">Pagado</option>
+                    <option value="Pendiente">Pendiente</option>
+                </select>
+                <button type="submit" class="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 font-bold transition">Guardar</button>
+            </form>
+        </div>
+
         <div id="resumen" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"></div>
 
         <div class="bg-white p-6 rounded-lg shadow-sm">
