@@ -1,33 +1,34 @@
 const DashboardLogica = {
     procesarResumen: (datos) => {
-        // 1. Validación de seguridad: si no hay datos, retornamos ceros directamente
+        // 1. Validación de seguridad
         if (!datos || !Array.isArray(datos)) {
-            return { totalGastos: 0, pendientes: 0, pagados: 0 };
+            return { gastos: 0, ganancias: 0, balance: 0 };
         }
 
-        // 2. Función interna para limpiar el valor
+        // 2. Función interna para limpiar y convertir el valor
         const limpiarValor = (val) => {
-            if (typeof val === 'number') return val;
-            if (!val) return 0;
-            
-            // Elimina cualquier carácter que no sea un número, punto o guion
-            const limpio = String(val).replace(/[^0-9.-]+/g, '');
-            return parseFloat(limpio) || 0;
+            const num = parseFloat(val);
+            return isNaN(num) ? 0 : num;
         };
 
         // 3. Calculamos los totales
-        const totalGastos = datos.reduce((sum, item) => sum + limpiarValor(item.valor), 0);
-        
-        const pendientes = datos
-            .filter(item => item && item.estado === 'Pendiente')
-            .reduce((sum, item) => sum + limpiarValor(item.valor), 0);
+        // Gastos son los valores negativos
+        const gastos = datos
+            .filter(item => limpiarValor(item.valor) < 0)
+            .reduce((sum, item) => sum + Math.abs(limpiarValor(item.valor)), 0);
             
-        const pagados = totalGastos - pendientes;
+        // Ganancias son los valores positivos
+        const ganancias = datos
+            .filter(item => limpiarValor(item.valor) >= 0)
+            .reduce((sum, item) => sum + limpiarValor(item.valor), 0);
+
+        // Balance Neto = Ganancias - Gastos
+        const balance = ganancias - gastos;
 
         return { 
-            totalGastos: Math.round(totalGastos), 
-            pendientes: Math.round(pendientes), 
-            pagados: Math.round(pagados) 
+            gastos: Math.round(gastos), 
+            ganancias: Math.round(ganancias), 
+            balance: Math.round(balance) 
         };
     }
 };
