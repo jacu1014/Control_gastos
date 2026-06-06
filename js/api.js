@@ -1,5 +1,5 @@
 // Añade al final de la URL: ?v=1 (o cualquier número que cambies cada vez)
-const API_URL = "https://script.google.com/macros/s/AKfycbwTmMSl15FhGJkLzAEwnVk-NGFDcVkP-5i-xsorB3SfS4KxicEjVw8COabmUnzsUC4Bgw/exec";
+const URL_API = "https://script.google.com/macros/s/AKfycbzNHPFE6eDhpUFCxLf9Kw335dsYf8sXLPLg1VnNHCaOUX5ll2kZ8E76DSAGgzg4NFf4Cg/exec";
 // Función para obtener los datos (GET)
 async function obtenerDatos() {
     try {
