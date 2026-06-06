@@ -1,5 +1,5 @@
 // Asegúrate de que esta URL sea la más reciente que desplegaste
-const API_URL = "https://script.google.com/macros/s/AKfycbx0Gd6IBQ27SAWpOoo-chBmH5z25-O6ki0Xo3VF7OTkK3VBJBgaGneD4IqLq3mdHn8Lwg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxe7tSn0rnaRfs5QzIFEW9KbU424Qmnxcfoxp6I1tQgwaXStDHG1txaFtuziMNkpcxSrA/exec";
 
 // Función para obtener los datos (GET)
 // Ahora retorna el objeto completo con {transacciones, categorias, metodos}
