@@ -51,15 +51,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 function actualizarCategorias() {
     const tipo = document.getElementById('tipoMovimiento').value;
     const catSelect = document.getElementById('categoria');
-    if(!catSelect) return;
     
+    // Limpiamos y dejamos la opción por defecto
     catSelect.innerHTML = '<option value="">Categoría</option>';
-    // Usamos el operador de coalescencia para evitar errores si la propiedad no existe
-    const categorias = (tipo === 'gasto') ? (datosGlobales.catGastos || []) : (datosGlobales.catGanancias || []);
     
-    categorias.forEach(cat => {
-        catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
-    });
+    // Usamos datosGlobales que obtuvimos al cargar la página
+    // Asegúrate de que los nombres de las propiedades coincidan exactamente con tu JSON
+    const categorias = (tipo === 'gasto') ? datosGlobales.catGastos : datosGlobales.catGanancias;
+    
+    if (categorias && Array.isArray(categorias)) {
+        categorias.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            catSelect.appendChild(option);
+        });
+    } else {
+        console.error("No se encontraron categorías para el tipo:", tipo);
+    }
 }
 
 function poblarMetodos(metodos) {
