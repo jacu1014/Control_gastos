@@ -1,15 +1,18 @@
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Obtener los datos desde la API
-    // Nota: Ahora 'datos' viene con estructura {transacciones, categorias, metodos}
-    const respuesta = await fetch(API_URL);
-    const data = await respuesta.json();
+    // Usamos la función obtenerDatos() definida en api.js
+    const data = await obtenerDatos(); 
     
-    // 2. Renderizar la tabla y tarjetas iniciales
-    renderizarTabla(data.transacciones);
-    renderizarResumen(data.transacciones);
+    // 2. Renderizar la tabla y tarjetas con las transacciones
+    if (data.transacciones) {
+        renderizarTabla(data.transacciones);
+        renderizarResumen(data.transacciones);
+    }
 
     // 3. Poblar el formulario con datos dinámicos de Configuración
-    poblarFormulario(data.categorias, data.metodos);
+    if (data.categorias && data.metodos) {
+        poblarFormulario(data.categorias, data.metodos);
+    }
 
     // 4. Activar el evento del formulario
     const form = document.getElementById('form-gastos');
@@ -26,7 +29,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 estado: document.getElementById('estado').value
             };
             
+            // Enviamos el dato a Google Sheets
             await guardarDato(nuevoGasto);
+            
+            // Recargamos para refrescar la tabla
             location.reload();
         });
     }
@@ -36,6 +42,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 function poblarFormulario(categorias, metodos) {
     const catSelect = document.getElementById('categoria');
     const metSelect = document.getElementById('metodoPago');
+    
+    // IMPORTANTE: Limpiamos las opciones actuales antes de cargar para evitar duplicados
+    catSelect.innerHTML = '<option value="">Categoría</option>';
+    metSelect.innerHTML = '<option value="">Método de Pago</option>';
     
     categorias.forEach(cat => {
         catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
