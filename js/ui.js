@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Obtener los datos desde la API
-    // Usamos la función obtenerDatos() definida en api.js
     const data = await obtenerDatos(); 
     
     // 2. Renderizar la tabla y tarjetas con las transacciones
@@ -9,9 +8,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderizarResumen(data.transacciones);
     }
 
-    // 3. Poblar el formulario con datos dinámicos de Configuración
-    if (data.categorias && data.metodos) {
-        poblarFormulario(data.categorias, data.metodos);
+    // 3. Poblar el formulario con datos dinámicos (ajustado a las 3 columnas del backend)
+    // Pasamos catGastos y metodos. Si necesitas catGanancias, lo pasas aquí también.
+    if (data.catGastos && data.metodos) {
+        poblarFormulario(data.catGastos, data.metodos);
     }
 
     // 4. Activar el evento del formulario
@@ -30,10 +30,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             };
             
             // Enviamos el dato a Google Sheets
-            await guardarDato(nuevoGasto);
+            const guardado = await guardarDato(nuevoGasto);
             
-            // Recargamos para refrescar la tabla
-            location.reload();
+            if (guardado) {
+                location.reload(); // Solo recargamos si se guardó correctamente
+            } else {
+                alert("Hubo un error al guardar. Por favor, intenta de nuevo.");
+            }
         });
     }
 });
@@ -43,7 +46,8 @@ function poblarFormulario(categorias, metodos) {
     const catSelect = document.getElementById('categoria');
     const metSelect = document.getElementById('metodoPago');
     
-    // IMPORTANTE: Limpiamos las opciones actuales antes de cargar para evitar duplicados
+    if (!catSelect || !metSelect) return;
+
     catSelect.innerHTML = '<option value="">Categoría</option>';
     metSelect.innerHTML = '<option value="">Método de Pago</option>';
     
@@ -59,17 +63,18 @@ function poblarFormulario(categorias, metodos) {
 // Función para pintar la tabla
 function renderizarTabla(datos) {
     const tbody = document.getElementById('tabla-datos');
+    if (!tbody) return;
     tbody.innerHTML = ''; 
     
     datos.forEach(item => {
         const colorEstado = item.estado === 'Pagado' ? 'text-green-600 font-bold' : 'text-red-600 font-bold';
         tbody.innerHTML += `
             <tr class="border-b hover:bg-gray-50">
-                <td class="p-2">${item.fecha}</td>
-                <td class="p-2">${item.descripcion}</td>
+                <td class="p-2">${item.fecha || '-'}</td>
+                <td class="p-2">${item.descripcion || '-'}</td>
                 <td class="p-2">${item.categoria || '-'}</td>
                 <td class="p-2">$${Number(item.valor || 0).toLocaleString()}</td>
-                <td class="p-2 ${colorEstado}">${item.estado}</td>
+                <td class="p-2 ${colorEstado}">${item.estado || 'Pendiente'}</td>
             </tr>`;
     });
 }
@@ -78,6 +83,7 @@ function renderizarTabla(datos) {
 function renderizarResumen(datos) {
     const resumen = DashboardLogica.procesarResumen(datos);
     const divResumen = document.getElementById('resumen');
+    if (!divResumen) return;
     
     divResumen.innerHTML = `
         <div class="card bg-white p-6 rounded shadow border-l-4 border-blue-500">
