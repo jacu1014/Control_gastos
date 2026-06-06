@@ -3,29 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Control de Gastos</title>
+    <title>Mi Control de Gastos 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="bg-gray-100 p-8">
     <div class="max-w-6xl mx-auto">
-        <h1 class="text-3xl font-bold mb-6">Mis Finanzas 2026</h1>
+        <h1 class="text-3xl font-bold mb-6 text-gray-800">Mis Finanzas 2026</h1>
         
-        <div id="resumen" class="grid grid-cols-3 gap-4 mb-8"></div>
+        <div id="resumen" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"></div>
 
-        <div class="bg-white p-6 rounded-lg shadow">
-            <table class="w-full text-left">
-                <thead>
-                    <tr class="border-b">
-                        <th class="p-2">Fecha</th>
-                        <th class="p-2">Descripción</th>
-                        <th class="p-2">Valor</th>
-                        <th class="p-2">Estado</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-datos"></tbody>
-            </table>
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+            <h2 class="text-xl font-semibold mb-4">Transacciones Recientes</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b bg-gray-50">
+                            <th class="p-3">Fecha</th>
+                            <th class="p-3">Descripción</th>
+                            <th class="p-3">Valor</th>
+                            <th class="p-3">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-datos"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
