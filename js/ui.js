@@ -31,16 +31,17 @@ function renderizarResumen(datos) {
     const resumen = DashboardLogica.procesarResumen(datos);
     const divResumen = document.getElementById('resumen');
     
+    // Dentro de tu función renderizarResumen:
     divResumen.innerHTML = `
-        <div class="bg-white p-6 rounded shadow border-l-4 border-blue-500">
+        <div class="card bg-white p-6 rounded shadow border-l-4 border-blue-500">
             <h3 class="text-gray-500 text-sm">Total Gastos</h3>
             <p class="text-2xl font-bold">$${resumen.totalGastos.toLocaleString()}</p>
         </div>
-        <div class="bg-white p-6 rounded shadow border-l-4 border-green-500">
+        <div class="card bg-white p-6 rounded shadow border-l-4 border-green-500">
             <h3 class="text-gray-500 text-sm">Ya Pagado</h3>
             <p class="text-2xl font-bold">$${resumen.pagados.toLocaleString()}</p>
         </div>
-        <div class="bg-white p-6 rounded shadow border-l-4 border-red-500">
+        <div class="card bg-white p-6 rounded shadow border-l-4 border-red-500">
             <h3 class="text-gray-500 text-sm">Pendiente</h3>
             <p class="text-2xl font-bold">$${resumen.pendientes.toLocaleString()}</p>
         </div>
