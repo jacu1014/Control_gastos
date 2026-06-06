@@ -14,15 +14,24 @@
         
         <div class="bg-blue-50 p-6 rounded-lg mb-8 shadow-sm border border-blue-100">
             <h2 class="text-lg font-bold mb-4 text-blue-800">Registrar Nuevo Movimiento</h2>
-            <form id="form-gastos" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <form id="form-gastos" class="grid grid-cols-1 md:grid-cols-6 gap-4">
                 <input type="date" id="fecha" class="p-2 border rounded" required>
                 <input type="text" id="descripcion" placeholder="Descripción" class="p-2 border rounded" required>
                 <input type="number" id="valor" placeholder="Valor" class="p-2 border rounded" required>
+                
+                <select id="categoria" class="p-2 border rounded" required>
+                    <option value="">Categoría</option>
+                </select>
+                <select id="metodoPago" class="p-2 border rounded" required>
+                    <option value="">Método de Pago</option>
+                </select>
+                
                 <select id="estado" class="p-2 border rounded">
                     <option value="Pagado">Pagado</option>
                     <option value="Pendiente">Pendiente</option>
                 </select>
-                <button type="submit" class="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 font-bold transition">Guardar</button>
+                
+                <button type="submit" class="md:col-span-6 bg-blue-600 text-white p-2 rounded hover:bg-blue-700 font-bold transition">Guardar</button>
             </form>
         </div>
 
@@ -36,6 +45,7 @@
                         <tr class="border-b bg-gray-50">
                             <th class="p-3">Fecha</th>
                             <th class="p-3">Descripción</th>
+                            <th class="p-3">Categoría</th>
                             <th class="p-3">Valor</th>
                             <th class="p-3">Estado</th>
                         </tr>
