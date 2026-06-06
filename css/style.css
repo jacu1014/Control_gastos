@@ -1,11 +1,14 @@
 /* css/style.css */
 body {
-    background-color: #f8fafc; /* Un gris muy suave */
+    background-color: #f8fafc;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #334155;
 }
 
+/* Efecto de elevación para tarjetas */
 .card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: white;
 }
 
 .card:hover {
@@ -13,8 +16,33 @@ body {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-/* Scrollbar personalizada para la tabla */
+/* Scrollbar personalizada para tablas largas */
 .table-container {
     max-height: 500px;
     overflow-y: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+}
+
+/* Estilo para los inputs y selectores del formulario */
+input, select {
+    border: 1px solid #cbd5e1 !important;
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: #3b82f6 !important;
+    ring: 2px solid #bfdbfe !important;
+}
+
+/* Ajuste para que la tabla sea más legible */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    background-color: #f1f5f9;
+    color: #475569;
+    font-weight: 600;
 }
