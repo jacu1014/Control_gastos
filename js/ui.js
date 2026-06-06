@@ -1,36 +1,43 @@
 let datosGlobales = {};
 
 document.addEventListener('DOMContentLoaded', async () => {
-    datosGlobales = await obtenerDatos(); 
+    // 1. Cargamos datos con un manejo de error básico
+    try {
+        datosGlobales = await obtenerDatos() || {}; 
+    } catch (err) {
+        console.error("Error al cargar datos globales:", err);
+        datosGlobales = { transacciones: [], catGastos: [], catGanancias: [], metodos: [] };
+    }
     
-    if (datosGlobales.transacciones) {
+    // 2. Renderizado de tabla y resumen con verificación de existencia
+    if (datosGlobales.transacciones && Array.isArray(datosGlobales.transacciones)) {
         renderizarTabla(datosGlobales.transacciones);
-        // Si el dashboard no carga, al menos no rompemos el resto de la UI
-        if (typeof DashboardLogica !== 'undefined') {
+        
+        if (typeof DashboardLogica !== 'undefined' && typeof DashboardLogica.procesarResumen === 'function') {
             renderizarResumen(datosGlobales.transacciones);
         }
     }
 
+    // 3. Configuración de Selectores
     const tipoSelect = document.getElementById('tipoMovimiento');
     if (tipoSelect) {
         tipoSelect.addEventListener('change', actualizarCategorias);
         actualizarCategorias(); 
     }
 
-    if (datosGlobales.metodos) {
+    if (datosGlobales.metodos && Array.isArray(datosGlobales.metodos)) {
         poblarMetodos(datosGlobales.metodos);
     }
 
+    // 4. Lógica del formulario
     const form = document.getElementById('form-gastos');
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const tipo = document.getElementById('tipoMovimiento').value;
-            let valor = parseFloat(document.getElementById('valor').value);
-            
-            if (tipo === 'gasto') valor = Math.abs(valor) * -1;
-            else valor = Math.abs(valor);
+            const valorRaw = parseFloat(document.getElementById('valor').value) || 0;
+            const valor = (tipo === 'gasto') ? Math.abs(valorRaw) * -1 : Math.abs(valorRaw);
             
             const nuevoMovimiento = {
                 fecha: document.getElementById('fecha').value,
@@ -43,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             const guardado = await guardarDato(nuevoMovimiento);
             if (guardado) location.reload();
-            else alert("Error al guardar.");
+            else alert("Error al guardar el movimiento.");
         });
     }
 });
@@ -55,21 +62,16 @@ function actualizarCategorias() {
     
     catSelect.innerHTML = '<option value="">Categoría</option>';
     
-    // Si 'tipo' es 'ganancia', buscamos 'catGanancias'
-    // Si 'tipo' es 'gasto', buscamos 'catGastos'
+    // Acceso seguro: si no hay datos, evita errores
     const key = (tipo === 'gasto') ? 'catGastos' : 'catGanancias';
-    const categorias = datosGlobales[key];
+    const categorias = datosGlobales ? (datosGlobales[key] || []) : [];
     
-    if (categorias && Array.isArray(categorias)) {
-        categorias.forEach(cat => {
-            const option = document.createElement('option');
-            option.value = cat;
-            option.textContent = cat;
-            catSelect.appendChild(option);
-        });
-    } else {
-        console.warn("Categorías no disponibles para:", tipo);
-    }
+    categorias.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        catSelect.appendChild(option);
+    });
 }
 
 function poblarMetodos(metodos) {
@@ -103,14 +105,16 @@ function renderizarTabla(datos) {
 }
 
 function renderizarResumen(datos) {
-    const resumen = DashboardLogica.procesarResumen(datos);
+    if (typeof DashboardLogica === 'undefined') return;
+    
+    const resumen = DashboardLogica.procesarResumen(datos) || { gastos: 0, ganancias: 0, balance: 0 };
     const divResumen = document.getElementById('resumen');
     if (!divResumen) return;
     
-    // Validamos que los datos existan antes de llamar a toLocaleString
-    const g = resumen.gastos || 0;
-    const gn = resumen.ganancias || 0;
-    const b = resumen.balance || 0;
+    // Conversión forzada a número para evitar TypeError con toLocaleString()
+    const g = Number(resumen.gastos) || 0;
+    const gn = Number(resumen.ganancias) || 0;
+    const b = Number(resumen.balance) || 0;
     
     divResumen.innerHTML = `
         <div class="bg-white p-6 rounded shadow border-l-4 border-red-500">
