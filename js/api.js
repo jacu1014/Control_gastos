@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbzI7RVfl58yAo65ZdzjY3Oc04qjuqdkBF4-sR-i3sX6qoDam3LIkSpQNV7rX4OyoQt_Lg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwcK9HjYt2HMnGnpw0KesMoGN3stzH14N0f_WaxrT2FYfEa-_h0ErUpc_v20w0bHSkOfg/exec";
 
 // Función para obtener los datos (GET)
 async function obtenerDatos() {
