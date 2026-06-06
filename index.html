@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Mi Control de Gastos</title>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Mis Finanzas 2026</h1>
+        
+        <div id="resumen" class="grid grid-cols-3 gap-4 mb-8"></div>
+
+        <div class="bg-white p-6 rounded-lg shadow">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="border-b">
+                        <th class="p-2">Fecha</th>
+                        <th class="p-2">Descripción</th>
+                        <th class="p-2">Valor</th>
+                        <th class="p-2">Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-datos"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbzI7RVfl58yAo65ZdzjY3Oc04qjuqdkBF4-sR-i3sX6qoDam3LIkSpQNV7rX4OyoQt_Lg/exec";
+
+        async function cargarDatos() {
+            const respuesta = await fetch(API_URL);
+            const datos = await respuesta.json();
+            const tbody = document.getElementById('tabla-datos');
+            
+            datos.forEach(item => {
+                const fila = `<tr>
+                    <td class="p-2">${item.fecha}</td>
+                    <td class="p-2">${item.descripcion}</td>
+                    <td class="p-2">$${item.valor.toLocaleString()}</td>
+                    <td class="p-2">${item.estado}</td>
+                </tr>`;
+                tbody.innerHTML += fila;
+            });
+        }
+        cargarDatos();
+    </script>
+</body>
+</html>
